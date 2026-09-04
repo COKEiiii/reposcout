@@ -23,6 +23,8 @@ def search_github_repositories(query):
     params = {
         "q": query,
         "per_page": 5,
+        "sort": "stars",
+        "order": "desc"
     }
 
     # 发送 GET 请求，timeout 表示最多等待 10 秒
@@ -68,7 +70,5 @@ def display_repositories(repos):
         print("URL:", repo["html_url"])
 
 query = input("Please enter a keyword to search for GitHub repositories: ")
-
 sort_by = input("Please enter the sorting criteria (e.g., stars, forks, updated): ").strip().lower()
-
 display_repositories(sort_repositories(search_github_repositories(query), sort_by))
