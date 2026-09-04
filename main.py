@@ -40,10 +40,21 @@ def search_github_repositories(query):
     data = response.json()
     return data["items"]
 
-def sort_repositories(repos):
-    # 按星标数量排序
-    sorted_repos = sorted(repos, key=lambda x: x["stargazers_count"], reverse=True)
-    
+def sort_repositories(repos, sort_by):
+    if sort_by == "stars":
+        # 按星标数量排序
+        sorted_repos = sorted(repos, key=lambda x: x["stargazers_count"], reverse=True)
+    elif sort_by == "forks":
+        # 按分支数量排序
+        sorted_repos = sorted(repos, key=lambda x: x["forks_count"], reverse=True)
+    elif sort_by == "updated":
+        # 按更新时间排序
+        sorted_repos = sorted(repos, key=lambda x: x["updated_at"], reverse=True)
+    else:
+        # 如果输入的排序条件不在预设范围内，默认按星标数量排序
+        sorted_repos = sorted(repos, key=lambda x: x["stargazers_count"], reverse=True)
+        sort_by = "stars"
+    print(f"Repositories sorted by {sort_by}:")
     return sorted_repos
 
 def display_repositories(repos):
@@ -52,7 +63,12 @@ def display_repositories(repos):
         print()
         print("Name:", repo["full_name"])
         print("Stars:", repo["stargazers_count"])
+        print("Forks:", repo["forks_count"])
+        print("Updated at:", repo["updated_at"])
         print("URL:", repo["html_url"])
 
 query = input("Please enter a keyword to search for GitHub repositories: ")
-display_repositories(sort_repositories(search_github_repositories(query)))
+
+sort_by = input("Please enter the sorting criteria (e.g., stars, forks, updated): ").strip().lower()
+
+display_repositories(sort_repositories(search_github_repositories(query), sort_by))
