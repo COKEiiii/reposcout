@@ -18,16 +18,19 @@ headers = {
     "Authorization": f"Bearer {token}",
 }
 
-def search_github_repositories(query, api_sort="stars"):
+def search_github_repositories(query, api_sort="stars", api_order="desc"):
     if api_sort not in ["stars", "forks", "updated"]:
         print(f"Invalid API sorting criteria '{api_sort}'. Defaulting to 'stars'.")
         api_sort = "stars"
+    if api_order not in ["asc", "desc"]:
+        print(f"Invalid API order criteria '{api_order}'. Defaulting to 'desc'.")
+        api_order = "desc"
     # 搜索条件：关键词和返回的仓库数量
     params = {
         "q": query,
         "per_page": 5,
         "sort": api_sort,
-        "order": "desc"
+        "order": api_order
     }
 
     # 发送 GET 请求，timeout 表示最多等待 10 秒
@@ -73,6 +76,7 @@ def display_repositories(repos):
         print("URL:", repo["html_url"])
 
 query = input("Please enter a keyword to search for GitHub repositories: ")
-sort_by = input("Please enter the sorting criteria (e.g., stars, forks, updated): ").strip().lower()
 api_sort = input("Please enter the API sorting criteria (e.g., stars, forks, updated): ").strip().lower()
-display_repositories(sort_repositories(search_github_repositories(query, api_sort), sort_by))
+api_order = input("Please enter the API order criteria (e.g., asc, desc): ").strip().lower()
+sort_by = input("Please enter the sorting criteria (e.g., stars, forks, updated): ").strip().lower()
+display_repositories(sort_repositories(search_github_repositories(query, api_sort, api_order), sort_by))
