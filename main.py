@@ -38,17 +38,21 @@ def search_github_repositories(query):
 
     # 把 GitHub 返回的 JSON 数据转换成 Python 字典
     data = response.json()
+    return data["items"]
 
-    return data
+def sort_repositories(repos):
+    # 按星标数量排序
+    sorted_repos = sorted(repos, key=lambda x: x["stargazers_count"], reverse=True)
+    
+    return sorted_repos
 
 def display_repositories(repos):
     # 遍历搜索结果中的每个仓库
-    for repo in repos["items"]:
+    for repo in repos:
         print()
         print("Name:", repo["full_name"])
         print("Stars:", repo["stargazers_count"])
         print("URL:", repo["html_url"])
-query = input("Please enter a keyword to search for GitHub repositories: ")
 
-repos = search_github_repositories(query)
-display_repositories(repos)
+query = input("Please enter a keyword to search for GitHub repositories: ")
+display_repositories(sort_repositories(search_github_repositories(query)))
