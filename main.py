@@ -9,6 +9,10 @@ load_dotenv()
 # 获取 GitHub 访问令牌
 token = os.getenv("GITHUB_TOKEN")
 
+if not token:
+    raise ValueError("GitHub token not found. Please set the GITHUB_TOKEN environment variable in the .env file.")
+
+
 # GitHub 搜索仓库的接口地址
 url = "https://api.github.com/search/repositories"
 
