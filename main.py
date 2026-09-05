@@ -40,7 +40,10 @@ def search_github_repositories(query, api_sort="stars", api_order="desc"):
         params=params,
         timeout=10,
     )
-
+    if response.status_code != 200:
+        print("Error:", response.status_code, response.text)
+        return [] # 如果请求失败，返回空列表
+    
     # 查看请求是否成功，200 表示成功
     print("Status code:", response.status_code)
 
