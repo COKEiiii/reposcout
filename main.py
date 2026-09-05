@@ -33,13 +33,18 @@ def search_github_repositories(query, api_sort="stars", api_order="desc"):
         "order": api_order
     }
 
+    try:
     # 发送 GET 请求，timeout 表示最多等待 10 秒
-    response = requests.get(
-        url,
-        headers=headers,
-        params=params,
-        timeout=10,
-    )
+        response = requests.get(
+            url,
+            headers=headers,
+            params=params,
+            timeout=10,
+        )
+    except requests.exceptions.RequestException as e:
+        print("Request failed:", e)
+        return [] # 如果请求失败，返回空列表
+    
     if response.status_code != 200:
         print("Error:", response.status_code, response.text)
         return [] # 如果请求失败，返回空列表
